@@ -16,7 +16,7 @@ export default function Search({ onSubmit }: SearchProps) {
 		onSubmit(text);
 
 		if(text){
-			setText('');
+			//setText('');
 		}
 	}
 
