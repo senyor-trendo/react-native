@@ -88,7 +88,7 @@ export default function HomeScreen() {
 	}
 
 	return (
-		<View>
+		<View style={styles.container}>
 			<Search onSubmit={handleSearch}></Search>
 			<BookList books={items}></BookList>
 		</View>
@@ -96,6 +96,9 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	},
 	titleContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
