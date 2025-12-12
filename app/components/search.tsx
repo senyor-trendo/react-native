@@ -3,9 +3,10 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import Button from './pressable-button';
 
 interface SearchProps {
+	disabled?: boolean,
 	onSubmit: (text: string) => void;
 }
-export default function Search({ onSubmit }: SearchProps) {
+export default function Search({ disabled, onSubmit }: SearchProps) {
 	
 	const [text, setText] = useState('');
 
@@ -14,21 +15,19 @@ export default function Search({ onSubmit }: SearchProps) {
 	}
 	function handleSubmit(){
 		onSubmit(text);
-
-		if(text){
-			//setText('');
-		}
 	}
-
+	function isDisabled(){
+		return !text || disabled;
+	}
 
 	return (
 		<View style={styles.container}>
-			<TextInput style={styles.input} placeholder='Cercar...' 
+			<TextInput style={styles.input} placeholder='Search book...' 
 				autoCapitalize="none"
 				autoCorrect={false}
 				onChangeText={handleText} value={text} 
 				onSubmitEditing={handleSubmit}></TextInput>
-			<Button title='Cercar' onPress={handleSubmit} disabled={!text}></Button>
+			<Button title='Search' onPress={handleSubmit} disabled={isDisabled()}></Button>
 		</View>
 	);
 }

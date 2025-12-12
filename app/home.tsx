@@ -9,6 +9,7 @@ import {
 import BookActions, { BookActionType } from './components/book-actions-modal';
 import BookList, { Book } from './components/book-list';
 import BookNotFound from './components/book-not-found-modal';
+import Loading from './components/loading';
 import Search from './components/search';
 
 export default function HomeScreen() {
@@ -16,6 +17,7 @@ export default function HomeScreen() {
 	const [actionsVisible, setActionsVisible] = useState(false);
 	const [noResultsVisible, setNoResultsVisible] = useState(false);
 	const [selectedItem, setSelectedItem] = useState<Book | undefined>(undefined);
+	const [isSearching, setIsSearching] = useState(false); // New state
 
 	async function handleLongPress(item: Book) {
 		setSelectedItem(item);
@@ -23,6 +25,7 @@ export default function HomeScreen() {
 	}
 	
 	async function reloadStatus(book: Book) {
+		setIsSearching(true); // Start loading
 		doSearch(book.search).then(html => {
 			try {
 				const status = extractBookStatus(html);
@@ -43,22 +46,34 @@ export default function HomeScreen() {
 				);
 			} catch (err) {
 				console.error(err);
+			} finally {
+				setIsSearching(false); // End loading
 			}
+		}).catch(err => {
+			console.error(err);
+			setIsSearching(false); // End loading on error too
 		})
 	}
 
 	async function handleSearch(text: string) {
-		//do not allow dupicates
+		// Don't search if already searching or empty text
+		if (isSearching || !text.trim()) {
+			return;
+		}
+
+		// Do not allow duplicates
 		if (items.some(book => book.search === text)) {
 			return;
 		}
 
+		setIsSearching(true); // Start loading
+		
 		doSearch(text).then(html => {
 			const pageType = checkPageType(html, 'ca');
 
 			switch(pageType){
 				case PageType.NoResults:
-					setNoResultsVisible(true)
+					setNoResultsVisible(true);
 					break;
 
 				case PageType.List:
@@ -74,16 +89,21 @@ export default function HomeScreen() {
 							data: bookInfo,
 							status: bookStatus
 						}]);
-
 					}
 					catch (error: any) {
 						console.error('Error in handleSearch:', error);
-
-						//TODO: show error
+						// TODO: show error
 					}
-				break;
+					break;
 			}
 		})
+		.catch(error => {
+			console.error('Search error:', error);
+			// TODO: show error
+		})
+		.finally(() => {
+			setIsSearching(false); // End loading
+		});
 	}
 
 	function handleAction(action: BookActionType, book: Book|undefined) {
@@ -105,14 +125,28 @@ export default function HomeScreen() {
 
 	return (
 		<View style={styles.container}>
-			<Search onSubmit={handleSearch} />
+			<Search 
+				onSubmit={handleSearch} 
+				disabled={isSearching} // Optional: disable search while loading
+			/>
+			<Loading visible={isSearching}>Searching...</Loading>
 			<BookList books={items} onLongPress={handleLongPress} />
-			<BookActions item={selectedItem} visible={actionsVisible} onClose={() => setActionsVisible(false)} onAction={handleAction}></BookActions>
-			<BookNotFound visible={noResultsVisible} onClose={() => setNoResultsVisible(false)}></BookNotFound>
+			<BookActions 
+				item={selectedItem} 
+				visible={actionsVisible} 
+				onClose={() => setActionsVisible(false)} 
+				onAction={handleAction} 
+			/>
+			<BookNotFound 
+				visible={noResultsVisible} 
+				onClose={() => setNoResultsVisible(false)} 
+			/>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 }
+	container: { 
+		flex: 1 
+	}
 });
