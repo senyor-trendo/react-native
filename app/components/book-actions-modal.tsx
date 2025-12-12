@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 
 	modalBtnText: {
 		fontSize: 16,
-		textAlign: 'center'
+		textAlign: 'left'
 	},
 
 	cancelBtn: {

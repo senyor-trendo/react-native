@@ -1,22 +1,25 @@
-import { extractBookInfo, extractBookStatus } from '@/utils/parser';
+import { checkPageType, extractBookInfo, extractBookStatus } from '@/utils/parser';
+import { PageType } from '@/utils/parser.model';
 import doSearch from '@/utils/search';
 import { useState } from 'react';
 import {
 	StyleSheet,
 	View
 } from 'react-native';
-import BookActions, { BookActionType } from './components/book-actions';
+import BookActions, { BookActionType } from './components/book-actions-modal';
 import BookList, { Book } from './components/book-list';
+import BookNotFound from './components/book-not-found-modal';
 import Search from './components/search';
 
 export default function HomeScreen() {
 	const [items, setItems] = useState<Book[]>([]);
-	const [modalVisible, setModalVisible] = useState(false);
+	const [actionsVisible, setActionsVisible] = useState(false);
+	const [noResultsVisible, setNoResultsVisible] = useState(false);
 	const [selectedItem, setSelectedItem] = useState<Book | undefined>(undefined);
 
 	async function handleLongPress(item: Book) {
 		setSelectedItem(item);
-		setModalVisible(true);
+		setActionsVisible(true);
 	}
 	
 	async function reloadStatus(book: Book) {
@@ -51,23 +54,34 @@ export default function HomeScreen() {
 		}
 
 		doSearch(text).then(html => {
-			try {
-				const bookInfo = extractBookInfo(html);
-				const bookStatus = extractBookStatus(html);
-				setItems(prevItems => [...prevItems, {
-					lastSearch: Date.now(),
-					search: text,
-					error: false,
-					responseLength: html.length,
-					data: bookInfo,
-					status: bookStatus
-				}]);
+			const pageType = checkPageType(html, 'ca');
 
-			}
-			catch (error: any) {
-				console.error('Error in handleSearch:', error);
+			switch(pageType){
+				case PageType.NoResults:
+					setNoResultsVisible(true)
+					break;
 
-				//TODO: show error
+				case PageType.List:
+				case PageType.Detail:
+					try {
+						const bookInfo = extractBookInfo(html);
+						const bookStatus = extractBookStatus(html);
+						setItems(prevItems => [...prevItems, {
+							lastSearch: Date.now(),
+							search: text,
+							error: false,
+							responseLength: html.length,
+							data: bookInfo,
+							status: bookStatus
+						}]);
+
+					}
+					catch (error: any) {
+						console.error('Error in handleSearch:', error);
+
+						//TODO: show error
+					}
+				break;
 			}
 		})
 	}
@@ -85,20 +99,20 @@ export default function HomeScreen() {
 			}
 		}
 
-		setModalVisible(false);
+		setActionsVisible(false);
 		setSelectedItem(undefined);
-		console.log(action, book);
 	}
 
 	return (
 		<View style={styles.container}>
 			<Search onSubmit={handleSearch} />
 			<BookList books={items} onLongPress={handleLongPress} />
-			<BookActions item={selectedItem} visible={modalVisible} onClose={() => setModalVisible(false)} onAction={handleAction}></BookActions>
+			<BookActions item={selectedItem} visible={actionsVisible} onClose={() => setActionsVisible(false)} onAction={handleAction}></BookActions>
+			<BookNotFound visible={noResultsVisible} onClose={() => setNoResultsVisible(false)}></BookNotFound>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
+	container: { flex: 1 }
 });
