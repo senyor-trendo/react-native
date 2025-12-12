@@ -86,46 +86,29 @@ function extractByLabel(html: string, label: string): string {
 }
 
 // Main function to extract book info
-export function extractBookInfo(htmlContent: string, language: string = 'ca'): BookInfo {
+export function extractBookInfo(html: string, language: string = 'ca'): BookInfo {
 	const fields = FIELDS[language];
 
-	// Extract title
-	const title = extractByLabel(htmlContent, fields.title);
-
-	// Extract author
-	const author = extractByLabel(htmlContent, fields.author);
-
-	// Extract publication
-	const publication = extractByLabel(htmlContent, fields.pub);
-
-	// Extract edition
-	const edition = extractByLabel(htmlContent, fields.edition);
-
-	// Extract description
-	const description = extractByLabel(htmlContent, fields.description);
-
-	// Extract collection
-	const collection = extractByLabel(htmlContent, fields.collection);
-
-	// Extract summary
-	const summary = extractByLabel(htmlContent,fields.summary);
-
-	// Extract uniform title
-	const uniformTitle = extractByLabel(htmlContent, fields.uniformTitle);
-
-	// Extract ISBN
-	const isbn = extractByLabel(htmlContent, fields.isbn);
+	const title = extractByLabel(html, fields.title);
+	const author = extractByLabel(html, fields.author);
+	const publication = extractByLabel(html, fields.pub);
+	const edition = extractByLabel(html, fields.edition);
+	const description = extractByLabel(html, fields.description);
+	const collection = extractByLabel(html, fields.collection);
+	const summary = extractByLabel(html, fields.summary);
+	const uniformTitle = extractByLabel(html, fields.uniformTitle);
+	const isbn = extractByLabel(html, fields.isbn);
 
 	// Extract image URL
 	let imageUrl = '';
 	const imgRegex = /<img[^>]*id="fitxa_imatge"[^>]*src="([^"]*)"[^>]*>/i;
-	const imgMatch = htmlContent.match(imgRegex);
+	const imgMatch = html.match(imgRegex);
 	if (imgMatch && imgMatch[1]) {
 		imageUrl = imgMatch[1];
 	} else {
 		// Fallback: look for any img with portadesbd.diba.cat
 		const fallbackRegex = /src="(https?:\/\/portadesbd\.diba\.cat[^"]*)"/i;
-		const fallbackMatch = htmlContent.match(fallbackRegex);
+		const fallbackMatch = html.match(fallbackRegex);
 		if (fallbackMatch && fallbackMatch[1]) {
 			imageUrl = fallbackMatch[1];
 		}
@@ -134,7 +117,7 @@ export function extractBookInfo(htmlContent: string, language: string = 'ca'): B
 	// Extract permanent link
 	let permanentLink = '';
 	const linkRegex = /<a[^>]*id="recordnum"[^>]*href="([^"]*)"[^>]*>/i;
-	const linkMatch = htmlContent.match(linkRegex);
+	const linkMatch = html.match(linkRegex);
 	if (linkMatch && linkMatch[1]) {
 		permanentLink = linkMatch[1];
 	}
@@ -154,87 +137,12 @@ export function extractBookInfo(htmlContent: string, language: string = 'ca'): B
 	};
 }
 
-// Function to extract library statuses
-export function extractLibraryStatuses(htmlContent: string): BookStatus[] {
-	const libraries: BookStatus[] = [];
-
-	// Find the library items table
-	const tableStart = htmlContent.indexOf('<table class="bibItems"');
-	if (tableStart === -1) return libraries;
-
-	// Find table rows
-	let currentIndex = htmlContent.indexOf('<tr', tableStart);
-
-	while (currentIndex !== -1) {
-		const nextTr = htmlContent.indexOf('<tr', currentIndex + 1);
-		const trEnd = htmlContent.indexOf('</tr>', currentIndex);
-
-		if (trEnd === -1) break;
-
-		const rowContent = htmlContent.substring(currentIndex, Math.min(trEnd + 5, nextTr !== -1 ? nextTr : htmlContent.length));
-
-		// Check if this is a library entry row (not header)
-		if (rowContent.includes('bibItemsEntry')) {
-			// Extract all td cells
-			const cells: string[] = [];
-			let tdIndex = 0;
-
-			while (true) {
-				const tdStart = rowContent.indexOf('<td', tdIndex);
-				if (tdStart === -1) break;
-
-				const tdEnd = rowContent.indexOf('</td>', tdStart);
-				if (tdEnd === -1) break;
-
-				const cellContent = rowContent.substring(tdStart, tdEnd);
-
-				// Extract text content, handling links
-				let text = cellContent;
-
-				// Check for links in the first cell
-				if (cells.length === 0) {
-					const linkMatch = cellContent.match(/<a[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/);
-					if (linkMatch) {
-						const library: BookStatus = {
-							location: decodeHtmlEntities(stripHtmlTags(linkMatch[2])).trim(),
-							locationLink: linkMatch[1],
-							signature: '',
-							status: '',
-							notes: ''
-						};
-						libraries.push(library);
-						text = linkMatch[2]; // Use link text for the cell content
-					}
-				}
-
-				// Clean the cell text
-				const cleanText = decodeHtmlEntities(stripHtmlTags(text)).trim();
-				cells.push(cleanText);
-
-				tdIndex = tdEnd + 5;
-			}
-
-			// If we found link in first cell and have other cells, fill the library info
-			if (libraries.length > 0 && cells.length >= 4) {
-				const lastLib = libraries[libraries.length - 1];
-				lastLib.signature = cells[1] || '';
-				lastLib.status = cells[2] || '';
-				lastLib.notes = cells[3] || '';
-			}
-		}
-
-		currentIndex = nextTr;
-	}
-
-	return libraries;
-}
-
 // Alternative regex-based library extraction (simpler)
-export function extractBookStatus(htmlContent: string): BookStatus[] {
+export function extractBookStatus(html: string): BookStatus[] {
 	const libraries: BookStatus[] = [];
 
 	// Find the table content
-	const tableMatch = htmlContent.match(/<table[^>]*class="bibItems"[^>]*>([\s\S]*?)<\/table>/i);
+	const tableMatch = html.match(/<table[^>]*class="bibItems"[^>]*>([\s\S]*?)<\/table>/i);
 	if (!tableMatch) return libraries;
 
 	const tableContent = tableMatch[1];
@@ -276,15 +184,4 @@ export function extractBookStatus(htmlContent: string): BookStatus[] {
 	}
 
 	return libraries;
-}
-
-// Utility function to parse HTML from a string
-export function parseHtmlString(htmlString: string, language: 'ca'|'es'|'en'): {
-	bookInfo: BookInfo;
-	libraryStatuses: BookStatus[];
-} {
-	return {
-		bookInfo: extractBookInfo(htmlString, language),
-		libraryStatuses: extractBookStatus(htmlString)
-	};
 }
