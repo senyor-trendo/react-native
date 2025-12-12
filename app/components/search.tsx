@@ -23,7 +23,11 @@ export default function Search({ onSubmit }: SearchProps) {
 
 	return (
 		<View style={styles.container}>
-			<TextInput style={styles.input} onChangeText={handleText} value={text} placeholder='Cercar...' onSubmitEditing={handleSubmit}></TextInput>
+			<TextInput style={styles.input} placeholder='Cercar...' 
+				autoCapitalize="none"
+				autoCorrect={false}
+				onChangeText={handleText} value={text} 
+				onSubmitEditing={handleSubmit}></TextInput>
 			<Button title='Cercar' onPress={handleSubmit} disabled={!text}></Button>
 		</View>
 	);
