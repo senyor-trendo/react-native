@@ -125,7 +125,7 @@ export default function HomeScreen() {
 
 	return (
 		<View style={styles.container}>
-			<Search  onSubmit={handleSearch} disabled={isSearching} />
+			<Search onSubmit={handleSearch} disabled={isSearching} />
 			<Loading visible={isSearching}>Searching...</Loading>
 			<BookList books={items} onLongPress={handleLongPress} />
 			<BookActions 

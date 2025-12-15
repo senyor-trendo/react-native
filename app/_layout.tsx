@@ -2,7 +2,7 @@ import 'react-native-reanimated';
 
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import HomeScreen from './home';
+import HomeScreen from './index';
 
 export default function RootLayout() {
 
