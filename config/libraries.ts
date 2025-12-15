@@ -45,14 +45,14 @@ export const PublicLibraries: PublicLibrary[] =
 		{ id: "bcn-sarria-collserola", name: "BCN SSG.Collserola Josep Miracle", searchAlias: 'barcelona' },
 		{ id: "bcn-sarria-foix", name: "BCN SSG.J.V. Foix", searchAlias: 'barcelona' },
 		{ id: "begues", name: "BEGUES" },
-		{ id: "bibliobus-cavall-bernat", name: "Bibliobús Cavall Bernat" },
-		{ id: "bibliobus-el-castellot", name: "Bibliobús El Castellot" },
-		{ id: "bibliobus-montau", name: "Bibliobús Montau" },
-		{ id: "bibliobus-montnegre", name: "Bibliobús Montnegre" },
-		{ id: "bibliobus-montserrat", name: "Bibliobús Montserrat" },
-		{ id: "bibliobus-pedraforca", name: "Bibliobús Pedraforca-Magatzem" },
-		{ id: "bibliobus-puigdon", name: "Bibliobús Puigdon" },
-		{ id: "bibliobus-tagamanent", name: "Bibliobús Tagamanent" },
+		{ id: "bbus-cavall-bernat", name: "Bibliobús Cavall Bernat" },
+		{ id: "bbus-el-castellot", name: "Bibliobús El Castellot" },
+		{ id: "bbus-montau", name: "Bibliobús Montau" },
+		{ id: "bbus-montnegre", name: "Bibliobús Montnegre" },
+		{ id: "bbus-montserrat", name: "Bibliobús Montserrat" },
+		{ id: "bbus-pedraforca", name: "Bibliobús Pedraforca-Magatzem" },
+		{ id: "bbus-puigdon", name: "Bibliobús Puigdon" },
+		{ id: "bbus-tagamanent", name: "Bibliobús Tagamanent" },
 		{ id: "bigues-i-riells", name: "BIGUES I RIELLS DEL FAI" },
 		{ id: "cabrera-de-mar", name: "CABRERA DE MAR.Ilturo" },
 		{ id: "cabrils", name: "CABRILS" },
@@ -69,21 +69,21 @@ export const PublicLibraries: PublicLibrary[] =
 		{ id: "cervello", name: "CERVELLÓ" },
 		{ id: "collbato", name: "COLLBATÓ.S.Durfort" },
 		{ id: "corbera-de-llobregat", name: "CORBERA DE LLOB" },
-		{ id: "cornella-central", name: "CORNELLÀ DE LLOB.Central" },
-		{ id: "cornella-campoamor", name: "CORNELLÀ DE LLOB.C.Campoamor" },
-		{ id: "cornella-marta-mata", name: "CORNELLÀ DE LLOB.Marta Mata" },
-		{ id: "cornella-pamies", name: "CORNELLÀ DE LLOB.T.Pàmies" },
+		{ id: "cor-central", name: "CORNELLÀ DE LLOB.Central" },
+		{ id: "cor-campoamor", name: "CORNELLÀ DE LLOB.C.Campoamor" },
+		{ id: "cor-marta-mata", name: "CORNELLÀ DE LLOB.Marta Mata" },
+		{ id: "cor-pamies", name: "CORNELLÀ DE LLOB.T.Pàmies" },
 		{ id: "cubelles", name: "CUBELLES.Mn. Joan Avinyó" },
 		{ id: "franqueses-del-valles", name: "FRANQUESES DEL V., LES.C.d Avall" },
 		{ id: "franqueses-magatzem", name: "FRANQUESES DEL V., LES.C.d Avall-Magatzem" },
 		{ id: "garriga", name: "GARRIGA, LA" },
 		{ id: "gava", name: "GAVÀ.Marian Colomé" },
 		{ id: "granollers", name: "GRANOLLERS.Roca Umbert" },
-		{ id: "lhospitalet-can-sumarro", name: "HOSPITALET DE LLOB.Can Sumarro" },
-		{ id: "lhospitalet-janes", name: "HOSPITALET DE LLOB.J. Janés" },
-		{ id: "lhospitalet-la-florida", name: "HOSPITALET DE LLOB.La Florida" },
-		{ id: "lhospitalet-europa", name: "HOSPITALET DE LLOB.Plaça d'Europa" },
-		{ id: "lhospitalet-tecla-sala", name: "HOSPITALET DE LLOB.Tecla Sala" },
+		{ id: "hosp-can-sumarro", name: "HOSPITALET DE LLOB.Can Sumarro" },
+		{ id: "hosp-janes", name: "HOSPITALET DE LLOB.J. Janés" },
+		{ id: "hosp-la-florida", name: "HOSPITALET DE LLOB.La Florida" },
+		{ id: "hosp-europa", name: "HOSPITALET DE LLOB.Plaça d'Europa" },
+		{ id: "hosp-tecla-sala", name: "HOSPITALET DE LLOB.Tecla Sala" },
 		{ id: "igualada", name: "IGUALADA.Central" },
 		{
 			id: "la-llagosta",
@@ -370,19 +370,19 @@ export const PublicLibraries: PublicLibrary[] =
 			name: "STA. COLOMA DE C.Pilarín Bayés"
 		},
 		{
-			id: "sta-coloma-de-gramenet-can-peixauet",
+			id: "gramenet-can-peixauet",
 			name: "STA. COLOMA DE GRAMENET.Can Peixauet"
 		},
 		{
-			id: "sta-coloma-de-gramenet-central",
+			id: "gramenet-central",
 			name: "STA. COLOMA DE GRAMENET.Central"
 		},
 		{
-			id: "sta-coloma-de-gramenet-fondo",
+			id: "gramenet-fondo",
 			name: "STA. COLOMA DE GRAMENET.Fondo"
 		},
 		{
-			id: "sta-coloma-de-gramenet-singulerin",
+			id: "gramenet-singulerin",
 			name: "STA. COLOMA DE GRAMENET.Singuerlín"
 		},
 		{
@@ -466,15 +466,15 @@ export const PublicLibraries: PublicLibrary[] =
 			name: "VILADECAVALLS.Pere Calders"
 		},
 		{
-			id: "vilanova-del-valles",
+			id: "vil-valles",
 			name: "VILANOVA DEL VALLÈS"
 		},
 		{
-			id: "vilanova-i-la-g-armand-cardona-torrandell",
+			id: "vil-geltru-armand-cardona-torrandell",
 			name: "VILANOVA I LA G.Armand Cardona Torrandell"
 		},
 		{
-			id: "vilanova-i-la-g-joan-oliva-i-mila",
+			id: "vil-geltru-joan-oliva-i-mila",
 			name: "VILANOVA I LA G.Joan Oliva i Milà"
 		},
 		{

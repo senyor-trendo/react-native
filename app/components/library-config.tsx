@@ -191,7 +191,6 @@ const LibraryConfig: React.FC<LibraryConfigProps> = ({
 
   const ListHeader = useMemo(() => (
     <View style={styles.headerContainer}>
-      <Text style={styles.title}>Select Libraries</Text>
       <Text style={styles.subtitle}>
         {selectedIds.length} of {PublicLibraries.length} selected
         {searchQuery ? ` • Showing ${totalVisible} results` : ''}

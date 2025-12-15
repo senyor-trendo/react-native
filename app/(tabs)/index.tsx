@@ -6,13 +6,13 @@ import {
 	StyleSheet,
 	View
 } from 'react-native';
-import BookActions, { BookActionType } from './components/book-actions-modal';
-import BookList, { Book } from './components/book-list';
-import BookNotFound from './components/book-not-found-modal';
-import Loading from './components/loading';
-import Search from './components/search';
+import BookActions, { BookActionType } from '../components/book-actions-modal';
+import BookList, { Book } from '../components/book-list';
+import BookNotFound from '../components/book-not-found-modal';
+import Loading from '../components/loading';
+import Search from '../components/search';
 
-export default function HomeScreen() {
+export default function Tab() {
 	const [items, setItems] = useState<Book[]>([]);
 	const [actionsVisible, setActionsVisible] = useState(false);
 	const [noResultsVisible, setNoResultsVisible] = useState(false);
@@ -96,6 +96,8 @@ export default function HomeScreen() {
 					}
 					break;
 			}
+
+			console.log(items)
 		})
 		.catch(error => {
 			console.error('Search error:', error);
@@ -125,25 +127,28 @@ export default function HomeScreen() {
 
 	return (
 		<View style={styles.container}>
-			<Search onSubmit={handleSearch} disabled={isSearching} />
-			<Loading visible={isSearching}>Searching...</Loading>
-			<BookList books={items} onLongPress={handleLongPress} />
-			<BookActions 
-				item={selectedItem} 
-				visible={actionsVisible} 
-				onClose={() => setActionsVisible(false)} 
-				onAction={handleAction} 
-			/>
-			<BookNotFound 
-				visible={noResultsVisible} 
-				onClose={() => setNoResultsVisible(false)} 
-			/>
+			<View style={{flex:1}}>
+				<Search onSubmit={handleSearch} disabled={isSearching} />
+				<Loading visible={isSearching}>Searching...</Loading>
+				<BookList books={items} onLongPress={handleLongPress} />
+				<BookActions 
+					item={selectedItem} 
+					visible={actionsVisible} 
+					onClose={() => setActionsVisible(false)} 
+					onAction={handleAction} 
+				/>
+				<BookNotFound 
+					visible={noResultsVisible} 
+					onClose={() => setNoResultsVisible(false)} 
+				/>
+			</View>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: { 
-		flex: 1 
+		flex: 1,
+		flexDirection: 'row'
 	}
 });

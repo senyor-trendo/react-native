@@ -1,25 +1,9 @@
-import 'react-native-reanimated';
+import { Stack } from 'expo-router';
 
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import HomeScreen from './index';
-
-export default function RootLayout() {
-
-  return (
-	<SafeAreaView style={styles.container}>
-		<View style={styles.container}>
-			<HomeScreen/>
-		</View>
-	</SafeAreaView>
-  );
+export default function Layout() {
+	return (
+		<Stack>
+			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+		</Stack>
+	);
 }
-
-const styles = StyleSheet.create({
-	container:{
-		flex: 1
-	},
-	text: {
-		fontWeight: 800
-	}
-})
